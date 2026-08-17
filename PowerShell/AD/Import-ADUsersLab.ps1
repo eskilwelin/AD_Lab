@@ -22,7 +22,7 @@ param(
 
 Import-Module ActiveDirectory
 
-$ADUsers = (Get-Content -Raw $Import | ConvertFrom-Json)
+$ADUsers = (Get-Content -Raw -Encoding UTF8 $Import | ConvertFrom-Json)
 
 function Get-OU{
 	param(
@@ -103,24 +103,24 @@ foreach ($User in $ADUsers) {
 		}
 		if ($User.employeeID -and ($ExistingUser = Get-ADUser -Filter "employeeID -eq '$($User.employeeID)'")) {
 			$SamAccountName = $ExistingUser.SamAccountName
-			Write-Verbose "A user with uid $($User.employeeID) already exists in $Domain"
+			Write-Host "A user with uid $($User.employeeID) already exists in $Domain" -ForegroundColor Yellow
 		}
 		else {
 			if ($PSCmdlet.ShouldProcess($User.name, "Creating AD user")) {
 				New-ADUser @UserInfo
-				Write-Verbose "The user $SamAccountName was created."
+				Write-Host "The user $SamAccountName was created." -ForegroundColor Green
 			} 
 		}
 		if ($User.groups){
 			foreach ($Group in $User.groups){
 				if ($PSCmdlet.ShouldProcess($Group, "Adding $SamAccountName to group")){
 					Add-ADGroupMember -Identity $Group -Members $SamAccountName
-					Write-Verbose "Adding $SamAccountName to $Group"
+					Write-Host "Adding $SamAccountName to $Group" -ForegroundColor Green
 				}
 			}
 		}
 		}
 	catch {
-		Write-Verbose "Failed to populate information for user $SamAccountName - $($_.Exception.Message)"
+		Write-Host "Failed to populate information for user $SamAccountName - $($_.Exception.Message)" -ForegroundColor Red
 	}
 }

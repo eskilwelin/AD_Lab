@@ -22,7 +22,7 @@ param(
 
 Import-Module ActiveDirectory
 
-$ADUsers = (Get-Content -Raw $Import | ConvertFrom-Json)
+$ADUsers = (Get-Content -Raw -Encoding UTF8 $Import | ConvertFrom-Json)
 
 function Get-OU{
 	param(

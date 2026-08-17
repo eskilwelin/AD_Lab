@@ -31,7 +31,7 @@ function Get-OU{
 	return $BaseOU, $Domain
 }
 
-$BaseOU, $Domain = (Get-OU -DomainRoot $Root -OrgName $OrgName)
+$BaseOU, $Domain = (Get-OU -Root $Root -OrgName $OrgName)
 
 if (!(Get-ADOrganizationalUnit -Filter "distinguishedName -eq '$BaseOU'")){
     if ($PSCmdlet.ShouldProcess($BaseOU, "Creating OU")){
