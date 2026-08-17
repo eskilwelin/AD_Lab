@@ -58,7 +58,7 @@ function Get-ValidSam {
 
 function Get-UPN {
 	param([Parameter(Mandatory=$true)][string]$Sam)
-	return $Sam + '@' + $Domain
+	return $Sam + '@' + $Root
 }
 
 function Get-Path {
