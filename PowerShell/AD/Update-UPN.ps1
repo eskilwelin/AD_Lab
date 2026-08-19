@@ -17,6 +17,7 @@ function Get-Users{
 $Users = (Get-Users -OldSuffix $OldSuffix -NewSuffix $NewSuffix)
 
 foreach ($User in $Users){
+    if ($User.UserPrincipalName -notlike "*@$OldSuffix") { continue }
     $NewUPN = $User.UserPrincipalName.Replace($OldSuffix,$NewSuffix)
     if ($PSCmdlet.ShouldProcess($User.UserPrincipalName, "Updating UPN to $NewUPN")) {
         $User | Set-ADUser -UserPrincipalName $NewUPN
