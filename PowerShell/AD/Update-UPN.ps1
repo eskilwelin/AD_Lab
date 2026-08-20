@@ -13,7 +13,7 @@ param(
 )
 Import-Module ActiveDirectory
 
-function Update-Accounts{
+function Get-Users{
     param(
         [Parameter(Mandatory=$true)][string]$OldSuffix,
         [Parameter(Mandatory=$true)][string]$NewSuffix
@@ -22,7 +22,7 @@ function Update-Accounts{
         Where-Object UserPrincipalName -NotLike "*@$NewSuffix"
 }
 
-$Users = Update-Accounts -OldSuffix $OldSuffix -NewSuffix $NewSuffix
+$Users = Get-Users -OldSuffix $OldSuffix -NewSuffix $NewSuffix
 
 foreach ($User in $Users){
     if ($User.UserPrincipalName -notlike "*@$OldSuffix") { continue }
